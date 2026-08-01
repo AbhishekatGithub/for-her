@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Twigs from Afar &mdash; for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ TOKENS ============ */
+  :root{
+    --cream:      #f6efdd;
+    --paper:      #fbf7ea;
+    --maroon:     #6c2c17;
+    --rust:       #bf6c2c;
+    --sienna:     #dd8a3d;
+    --sage:       #7d8a63;
+    --sage-dark:  #5b6647;
+    --ink:        #4a3a2c;
+    --ink-soft:   #7a6a58;
+    --hair:       rgba(108,44,23,0.16);
+    --max-w:      720px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    font-size:19px;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3, .display{
+    font-family:'Cormorant Garamond', serif;
+    color:var(--maroon);
+    font-weight:600;
+    margin:0;
+  }
+
+  .eyebrow{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-size:13px;
+    color:var(--rust);
+    font-weight:500;
+  }
+
+  em{ color:var(--maroon); font-style:italic; }
+
+  section{
+    max-width:var(--max-w);
+    margin:0 auto;
+    padding:96px 28px;
+    position:relative;
+  }
+
+  .rule{
+    width:64px; height:1px;
+    background:var(--hair);
+    margin:36px auto;
+  }
+
+  /* ============ FLOATING PETALS (ambient) ============ */
+  #petals{
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:1;
+    overflow:hidden;
+  }
+  .petal{
+    position:absolute;
+    top:-5%;
+    opacity:0.55;
+    animation-name: drift;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  @keyframes drift{
+    0%   { transform: translateY(0) translateX(0) rotate(0deg); }
+    50%  { transform: translateY(50vh) translateX(24px) rotate(160deg); }
+    100% { transform: translateY(105vh) translateX(-16px) rotate(320deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .petal{ animation:none; display:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding-top:64px;
+    padding-bottom:64px;
+  }
+  .hero .eyebrow{ margin-bottom:22px; }
+  .branch-wrap{ width:280px; max-width:70vw; margin-bottom:18px; }
+  .hero h1{
+    font-size:clamp(40px, 8vw, 68px);
+    line-height:1.08;
+    letter-spacing:0.005em;
+  }
+  .hero .for-line{
+    font-size:15px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .hero .subtitle{
+    margin-top:22px;
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:19px;
+    max-width:420px;
+  }
+  .scroll-cue{
+    margin-top:56px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:14px;
+    color:var(--ink-soft);
+    letter-spacing:0.08em;
+    animation:bob 2.6s ease-in-out infinite;
+  }
+  @keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+  @media (prefers-reduced-motion: reduce){ .scroll-cue{ animation:none; } }
+
+  /* ============ REVEAL ON SCROLL ============ */
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ============ INTRO ============ */
+  .intro p{
+    font-size:21px;
+    text-align:center;
+    color:var(--ink);
+  }
+  .intro p + p{ margin-top:20px; }
+
+  /* ============ PLAYLIST ============ */
+  .section-title{
+    text-align:center;
+    font-size:34px;
+    margin-bottom:8px;
+  }
+  .section-sub{
+    text-align:center;
+    color:var(--ink-soft);
+    font-style:italic;
+    font-size:16px;
+    margin-bottom:48px;
+  }
+  .song{
+    display:flex;
+    gap:20px;
+    align-items:baseline;
+    padding:20px 0;
+    border-bottom:1px solid var(--hair);
+  }
+  .song:first-of-type{ border-top:1px solid var(--hair); }
+  .song .mark{
+    font-family:'Cormorant Garamond', serif;
+    color:var(--sienna);
+    font-size:22px;
+    font-style:italic;
+    flex-shrink:0;
+    width:26px;
+  }
+  .song-body h3{
+    font-size:24px;
+    font-weight:500;
+    display:inline;
+  }
+  .song-body .movie{
+    color:var(--ink-soft);
+    font-size:15px;
+    font-style:italic;
+    margin-left:8px;
+  }
+  .song-body .caption{
+    display:block;
+    margin-top:4px;
+    color:var(--ink);
+    font-style:italic;
+  }
+  .note-copyright{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13px;
+    margin-top:28px;
+    font-style:italic;
+  }
+
+  /* ============ AUDIO WIDGET ============ */
+  .audio-section{ text-align:center; }
+  .audio-card{
+    background:var(--paper);
+    border:1px solid var(--hair);
+    border-radius:6px;
+    padding:36px 28px 30px;
+    box-shadow:0 24px 60px -34px rgba(108,44,23,0.28);
+  }
+  .audio-card .eyebrow{ display:block; margin-bottom:10px; }
+  .audio-card h2{ font-size:30px; margin-bottom:10px; }
+  .audio-card .audio-note{
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:16px;
+    max-width:440px;
+    margin:0 auto 26px;
+  }
+  .play-link{
+    display:inline-flex;
+    align-items:center;
+    gap:14px;
+    text-decoration:none;
+    background:var(--cream);
+    border:1px solid var(--hair);
+    border-radius:999px;
+    padding:12px 26px 12px 12px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:17px;
+    color:var(--maroon);
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .play-link:hover, .play-link:focus-visible{
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px -18px rgba(108,44,23,0.4);
+  }
+  .play-circle{
+    display:flex; align-items:center; justify-content:center;
+    width:40px; height:40px;
+    border-radius:50%;
+    background:var(--sienna);
+    flex-shrink:0;
+  }
+  .play-circle svg{ margin-left:2px; }
+  .audio-caption{
+    margin-top:18px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:15px;
+    color:var(--rust);
+    letter-spacing:0.03em;
+  }
+
+  /* ============ TIMELINE ============ */
+  .timeline{ display:flex; flex-direction:column; gap:64px; }
+  .moment{ display:grid; grid-template-columns:1fr 1.15fr; gap:32px; align-items:center; }
+  .moment:nth-child(even){ direction:rtl; }
+  .moment:nth-child(even) > *{ direction:ltr; }
+  .moment .m-date{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--rust);
+    font-size:15px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .moment h3{ font-size:26px; font-weight:500; margin-bottom:8px; }
+  .moment p{ color:var(--ink-soft); font-size:17px; }
+
+  .photo{
+    aspect-ratio:4/5;
+    border-radius:4px;
+    overflow:hidden;
+    background:var(--paper);
+    border:1px solid var(--hair);
+    position:relative;
+  }
+  .photo img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .photo .placeholder{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:8px;
+    padding:20px; text-align:center;
+    color:var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:15px;
+    background:
+      repeating-linear-gradient(135deg, var(--hair), var(--hair) 1px, transparent 1px, transparent 14px);
+  }
+  .photo .placeholder svg{ width:28px; height:28px; opacity:0.5; }
+
+  @media (max-width:640px){
+    .moment{ grid-template-columns:1fr; }
+    .moment:nth-child(even){ direction:ltr; }
+  }
+
+  /* ============ GALLERY ============ */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:14px;
+  }
+  .gallery-grid .photo:nth-child(3n+2){ margin-top:26px; }
+  .gallery-grid .photo{ aspect-ratio:3/4; }
+  .gallery-cap{
+    text-align:center; font-style:italic; color:var(--ink-soft);
+    font-size:15px; margin-top:20px;
+  }
+  @media (max-width:560px){
+    .gallery-grid{ grid-template-columns:repeat(2,1fr); }
+    .gallery-grid .photo:nth-child(3n+2){ margin-top:0; }
+  }
+
+  /* ============ ORANGE (easter egg) ============ */
+  .orange-wrap{
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center;
+  }
+  .orange-btn{
+    background:none; border:none; cursor:pointer;
+    padding:12px;
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+  .orange-btn svg{ width:64px; height:64px; transition:transform 0.35s ease; }
+  .orange-btn:hover svg, .orange-btn:focus-visible svg{ transform:scale(1.08) rotate(-4deg); }
+  .orange-hint{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:14px;
+    color:var(--ink-soft);
+    letter-spacing:0.05em;
+  }
+  .orange-msg{
+    max-width:440px;
+    margin-top:22px;
+    font-size:20px;
+    font-style:italic;
+    color:var(--maroon);
+    opacity:0;
+    max-height:0;
+    overflow:hidden;
+    transition:opacity 0.6s ease, max-height 0.6s ease, margin 0.6s ease;
+  }
+  .orange-msg.open{ opacity:1; max-height:200px; margin-top:22px; }
+
+  /* ============ LETTER ============ */
+  .letter{
+    background:var(--paper);
+    border:1px solid var(--hair);
+    border-radius:6px;
+    padding:52px 44px;
+    box-shadow:0 24px 60px -30px rgba(108,44,23,0.25);
+  }
+  .letter p{ margin:0 0 18px 0; }
+  .letter p:last-of-type{ margin-bottom:0; }
+  .sign-off{
+    margin-top:30px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:22px;
+    color:var(--maroon);
+    text-align:right;
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    text-align:center;
+    padding:60px 28px 80px;
+    color:var(--ink-soft);
+    font-size:14px;
+    font-style:italic;
+  }
+  footer .branch-small{ width:120px; margin:0 auto 18px; opacity:0.8; }
+
+  ::selection{ background:var(--sienna); color:var(--paper); }
+
+</style>
+</head>
+<body>
+
+<div id="petals" aria-hidden="true"></div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <p class="eyebrow">01 August &middot; three months, and then some</p>
+  <div class="branch-wrap">
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="orange blossom branch">
+      <path d="M20,40 C70,55 110,80 150,90 C190,100 230,85 270,95" fill="none" stroke="#8a7a5c" stroke-width="2" stroke-linecap="round"/>
+      <!-- leaves -->
+      <path d="M40,42 C25,25 15,10 22,-2 C40,5 45,25 40,42 Z" fill="var(--sage)" transform="translate(0,10)"/>
+      <path d="M65,52 C48,42 32,38 25,48 C40,60 58,60 65,52 Z" fill="var(--sage)"/>
+      <path d="M235,92 C255,80 272,78 280,88 C265,100 245,100 235,92 Z" fill="var(--sage-dark)"/>
+      <path d="M255,100 C270,110 280,122 276,132 C260,126 252,112 255,100 Z" fill="var(--sage)"/>
+      <!-- blossom 1 -->
+      <g transform="translate(95,58)">
+        <g fill="#fbf7ea" stroke="#e7ddc4" stroke-width="0.5">
+          <ellipse cx="0" cy="-16" rx="9" ry="14"/>
+          <ellipse cx="13" cy="-8" rx="9" ry="14" transform="rotate(72 13 -8)"/>
+          <ellipse cx="9" cy="10" rx="9" ry="14" transform="rotate(144 9 10)"/>
+          <ellipse cx="-9" cy="10" rx="9" ry="14" transform="rotate(216 -9 10)"/>
+          <ellipse cx="-13" cy="-8" rx="9" ry="14" transform="rotate(288 -13 -8)"/>
+        </g>
+        <circle cx="0" cy="0" r="4.5" fill="var(--sienna)"/>
+      </g>
+      <!-- bud -->
+      <g transform="translate(205,72)">
+        <ellipse cx="0" cy="0" rx="7" ry="10" fill="#fbf7ea" stroke="#e7ddc4" stroke-width="0.5"/>
+        <path d="M0,-9 C4,-2 4,4 0,9 C-4,4 -4,-2 0,-9 Z" fill="var(--sage-dark)" opacity="0.5"/>
+      </g>
+      <!-- orange fruit -->
+      <circle cx="155" cy="112" r="19" fill="var(--sienna)"/>
+      <circle cx="150" cy="106" r="6" fill="#ffffff" opacity="0.18"/>
+    </svg>
+  </div>
+  <p class="for-line">for you</p>
+  <h1>Twigs from Afar</h1>
+  <p class="subtitle">a small page, grown from one very large yes.</p>
+  <p class="scroll-cue">keep going &darr;</p>
+</section>
+
+<!-- ============ AUDIO WIDGET ============ -->
+<section class="audio-section reveal">
+  <div class="audio-card">
+    <span class="eyebrow">before you scroll any further</span>
+    <h2>press play first</h2>
+    <p class="audio-note">Reetigowla, on violin. Just an instrumental &mdash; no words needed. Let it run quietly under everything else on this page.</p>
+    <a class="play-link" href="https://www.youtube.com/watch?v=B89_FSTOX9M" target="_blank" rel="noopener">
+      <span class="play-circle">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--paper)"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+      <span>play the ragam on YouTube</span>
+    </a>
+    <p class="audio-caption">then, keep going &darr;</p>
+  </div>
+</section>
+
+<!-- ============ INTRO ============ -->
+<section class="intro reveal">
+  <p>It has been three months since you let me say the thing I had been carrying around like a secret, and you said it back before I even finished the sentence.</p>
+  <p>Everyone tells you the beginning is the easy part. Ours didn't feel easy &mdash; it felt <em>certain</em>, which I have decided is a better word for it.</p>
+  <p>So today, instead of just a message, you get a whole small page. Scroll on.</p>
+</section>
+
+<div class="rule"></div>
+
+<!-- ============ PLAYLIST ============ -->
+<section class="reveal">
+  <h2 class="section-title">three ragas, older than us</h2>
+  <p class="section-sub">the songs this page is quietly borrowing its mood from</p>
+
+  <div class="song">
+    <span class="mark">i.</span>
+    <div class="song-body">
+      <h3>Sreeragamo Thedunnu</h3>
+      <span class="movie">&mdash; Pavithram, 1994</span>
+      <span class="caption">for two people quietly looking for the same note.</span>
+    </div>
+  </div>
+  <div class="song">
+    <span class="mark">ii.</span>
+    <div class="song-body">
+      <h3>Vannathipoo Puzhayude Theerath</h3>
+      <span class="movie">&mdash; Kaliyattam, 1997</span>
+      <span class="caption">for moonlit evenings by no river in particular, just wherever you happen to be.</span>
+    </div>
+  </div>
+  <div class="song">
+    <span class="mark">iii.</span>
+    <div class="song-body">
+      <h3>Devi Aathmaragamekam</h3>
+      <span class="movie">&mdash; Njan Gandharvan, 1991</span>
+      <span class="caption">for calling someone your muse and actually meaning it.</span>
+    </div>
+  </div>
+
+  <p class="note-copyright">(no lyrics here &mdash; just titles and a little context. go listen to them for the real thing.)</p>
+</section>
+
+<div class="rule"></div>
+
+<!-- ============ TIMELINE ============ -->
+<section class="reveal">
+  <h2 class="section-title">how we got here</h2>
+  <p class="section-sub">a short and biased history</p>
+
+  <div class="timeline">
+    <div class="moment">
+      <div>
+        <p class="m-date">chapter one</p>
+        <h3>the first hello</h3>
+        <p>[Write a line or two about how you two first met or started talking.]</p>
+      </div>
+      <div class="photo">
+        <img src="photos/moment-1.jpg" alt="the first hello" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="placeholder" style="display:flex">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>
+          add photo &middot; photos/moment-1.jpg
+        </div>
+      </div>
+    </div>
+
+    <div class="moment">
+      <div>
+        <p class="m-date">chapter two</p>
+        <h3>the confession</h3>
+        <p>[A line about the day you told her &mdash; where you were, how nervous you were, what she said.]</p>
+      </div>
+      <div class="photo">
+        <img src="photos/moment-2.jpg" alt="the confession" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="placeholder" style="display:flex">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>
+          add photo &middot; photos/moment-2.jpg
+        </div>
+      </div>
+    </div>
+
+    <div class="moment">
+      <div>
+        <p class="m-date">chapter three</p>
+        <h3>today &mdash; three months in</h3>
+        <p>[A line about where you both are now, an inside joke, or something you're looking forward to together.]</p>
+      </div>
+      <div class="photo">
+        <img src="photos/moment-3.jpg" alt="today" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="placeholder" style="display:flex">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>
+          add photo &middot; photos/moment-3.jpg
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ============ GALLERY ============ -->
+<section class="reveal">
+  <h2 class="section-title">us, lately</h2>
+  <p class="section-sub">a small scrapbook</p>
+
+  <div class="gallery-grid">
+    <div class="photo">
+      <img src="photos/us-1.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>photos/us-1.jpg</div>
+    </div>
+    <div class="photo">
+      <img src="photos/us-2.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>photos/us-2.jpg</div>
+    </div>
+    <div class="photo">
+      <img src="photos/us-3.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>photos/us-3.jpg</div>
+    </div>
+    <div class="photo">
+      <img src="photos/us-4.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>photos/us-4.jpg</div>
+    </div>
+    <div class="photo">
+      <img src="photos/us-5.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>photos/us-5.jpg</div>
+    </div>
+    <div class="photo">
+      <img src="photos/us-6.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-6 6"/></svg>photos/us-6.jpg</div>
+    </div>
+  </div>
+  <p class="gallery-cap">(drop six photos into a <code>/photos</code> folder with these filenames, and they'll slot right in.)</p>
+</section>
+
+<div class="rule"></div>
+
+<!-- ============ ORANGE EASTER EGG ============ -->
+<section class="reveal orange-wrap">
+  <h2 class="section-title">one more thing</h2>
+  <p class="section-sub">go on, it's ripe</p>
+  <button class="orange-btn" id="orangeBtn" aria-expanded="false">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="54" r="34" fill="var(--sienna)"/>
+      <circle cx="40" cy="44" r="10" fill="#ffffff" opacity="0.2"/>
+      <path d="M50,20 C46,12 48,6 54,2" fill="none" stroke="var(--sage-dark)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M50,10 C58,6 64,10 64,16 C56,18 50,16 50,10 Z" fill="var(--sage)"/>
+    </svg>
+    <span class="orange-hint">tap the orange</span>
+  </button>
+  <p class="orange-msg" id="orangeMsg">[Write your secret little message here &mdash; a reason you like her, a promise, an inside joke. This is the moment to be as soft and unguarded as you want.]</p>
+</section>
+
+<div class="rule"></div>
+
+<!-- ============ LETTER ============ -->
+<section class="reveal">
+  <div class="letter">
+    <p class="eyebrow" style="display:block; margin-bottom:18px;">a note, folded small</p>
+    <p>Three months isn't very long. It's barely enough time to learn someone's coffee order, let alone their whole heart. And yet, somehow, it already feels like you've been a fixed point in my week for much longer than that.</p>
+    <p>[Add a paragraph here about something specific &mdash; a habit of hers you love, a memory from the past three months, or what you're hoping the next few months look like.]</p>
+    <p>Here's to the twigs from afar finding their way to the same branch. Happy three months, and many, many more.</p>
+    <p class="sign-off">&mdash; yours, always finding a reason to write about you</p>
+  </div>
+</section>
+
+<footer>
+  <div class="branch-small">
+    <svg viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10,30 C80,42 140,20 200,32 C240,40 270,26 290,30" fill="none" stroke="#8a7a5c" stroke-width="1.4"/>
+      <circle cx="150" cy="34" r="7" fill="var(--sienna)"/>
+      <ellipse cx="100" cy="18" rx="6" ry="10" fill="var(--sage)" transform="rotate(-20 100 18)"/>
+      <ellipse cx="220" cy="18" rx="6" ry="10" fill="var(--sage-dark)" transform="rotate(20 220 18)"/>
+    </svg>
+  </div>
+  <p>made for [Her Name], 01.08.2026</p>
+</footer>
+
+<script>
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // orange easter egg
+  const btn = document.getElementById('orangeBtn');
+  const msg = document.getElementById('orangeMsg');
+  btn.addEventListener('click', () => {
+    const open = msg.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  // ambient petals (skips itself if reduced motion is preferred)
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced) {
+    const field = document.getElementById('petals');
+    const petalSVG = (color) => `
+      <svg viewBox="0 0 20 20" width="14" height="14" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="10" cy="10" rx="6" ry="9" fill="${color}"/>
+      </svg>`;
+    const colors = ['#fbf7ea', '#f2e6c8', '#e7c99a'];
+    const count = window.innerWidth < 640 ? 8 : 14;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (14 + Math.random() * 10) + 's';
+      p.style.animationDelay = (Math.random() * -20) + 's';
+      p.innerHTML = petalSVG(colors[i % colors.length]);
+      field.appendChild(p);
+    }
+  }
+</script>
+
+</body>
+</html>
